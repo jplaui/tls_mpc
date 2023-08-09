@@ -5,17 +5,9 @@ package main
 import (
 	// "binary"
 	"crypto/hmac"
-	"crypto/sha256"
+	// "crypto/sha256"
 )
 
-// first test: xor addition of shares s and output s value
-// Tests:
-// client share "85fab58ded2ba91ca35e259b922d1894e2e3dbec39ab1305d51e3aaae4813d05"
-// proxy share "28133639f2a3eaa0ce95c03403897ea3f9442594c7746132b0c62bb8b3594f42"
-// reconstructed secret DHE "ae0debc7dfcf93bd71f3e5cf95b69738dc280181011f743885e4666397da8c47"
-
-// second test: sha executions of reconstructed secret share to compute SHTS
-// hint: take hmac example as help
 // Tests:
 // dES: 0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba
 // cShare: 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac
@@ -25,8 +17,8 @@ import (
 // label+H2: 0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701
 // SHTS: 7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701 examples/shts.mpcl
-// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/shts.mpcl
+// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701 examples/tls13_shts.mpcl
+// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_shts.mpcl
 
 type Garbler struct {
 	modP      uint512
