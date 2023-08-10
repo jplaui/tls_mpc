@@ -23,6 +23,12 @@ import (
 // serverKey: 2ca886649783b6cd626a4b04a96be1ef
 // masked server key: d5ad091155c804d0f135f394a376ed7f (mask: 4647eb76ffd794580046acf096d6b7a2)
 
+// used to check/match ecb32, ecb33
+// chipertext chunks: ce64df1813d37137142dc0579dc7f4e2ba4f8c7e1fe62b23747998b59da16a3f
+// chunkIndex: 32
+// number chunks: 2
+// plaintext chunks: 302c353631204575726f227d2c227072696365223a2233383030322e32222c22
+
 // dES: 0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba
 // cShare: 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac
 // pShare: 0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df
@@ -36,15 +42,14 @@ import (
 
 // secret mask (16 bytes): 0x4647eb76ffd794580046acf096d6b7a2
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_ecb_response.mpcl
-// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_ecb_response.mpcl
-
+// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_ecb_kdc.mpcl
 type Garbler struct {
 	modP      uint512
 	privShare uint512
 	dES       [32]byte
 }
 
+// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_ecb_kdc.mpcl
 type Evaluator struct {
 	// privShare [32]byte
 	privShare uint512
@@ -54,7 +59,7 @@ type Evaluator struct {
 	keyLabel  [14]byte
 }
 
-func main(g Garbler, e Evaluator) ([]byte, []byte) {
+func main(g Garbler, e Evaluator) ([]byte, []byte, []byte) {
 
 	// combine secret shares into DHE
 	DHE := (g.privShare + e.privShare) % g.modP
@@ -113,7 +118,14 @@ func main(g Garbler, e Evaluator) ([]byte, []byte) {
 	nonce3 := getNonce(iv, 33)
 	ECB33 := aes.Block128(key, nonce3)
 
-	return ECB32, ECB33
+	// return value
+	var ecbs [32]byte
+	for i := 0; i < 16; i++ {
+		ecbs[i] = ECB32[i]
+		ecbs[16+i] = ECB33[i]
+	}
+
+	return ECBK, ECB1, ecbs
 }
 
 func byteToUint512(x [64]byte) uint512 {
