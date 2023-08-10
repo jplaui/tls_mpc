@@ -7,6 +7,8 @@ import (
 	"crypto/hmac"
 )
 
+// these sample values compute response (server side kdc) data ecbs
+
 // Tests:
 // H2: 825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc9057
 // H0: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
@@ -104,7 +106,14 @@ func main(g Garbler, e Evaluator) ([]byte, []byte) {
 	nonce := getNonce(iv, 1)
 	ECB1 := aes.Block128(key, nonce)
 
-	return ECBK, ECB1
+	// compute two example chunks to verify if ECB computation for record data works
+	nonce2 := getNonce(iv, 32)
+	ECB32 := aes.Block128(key, nonce2)
+
+	nonce3 := getNonce(iv, 33)
+	ECB33 := aes.Block128(key, nonce3)
+
+	return ECB32, ECB33
 }
 
 func byteToUint512(x [64]byte) uint512 {

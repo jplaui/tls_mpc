@@ -3,12 +3,22 @@
 package main
 
 import (
-	// "binary"
 	"crypto/hmac"
-	// "crypto/sha256"
 )
 
-// Tests:
+// Tests to derive CHTS:
+// dES: 0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba
+// cShare: 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac
+// pShare: 0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df
+// pModP: 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
+// HS: c571a176894ac7aff65d52522f4d0861060f3c3b96144567dd10fa79d218d878
+// label+H2: 0x002012746c7331332063206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701
+// CHTS: 136513e4c51032bb2ba86892f0e3e24a75b4fbfef56d92cc0c57d4c67a847e65
+
+// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332063206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701 examples/tls13_xhts.mpcl
+// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_xhts.mpcl
+
+// Tests to derive SHTS:
 // dES: 0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba
 // cShare: 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac
 // pShare: 0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df
@@ -17,8 +27,8 @@ import (
 // label+H2: 0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701
 // SHTS: 7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701 examples/tls13_shts.mpcl
-// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_shts.mpcl
+// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701 examples/tls13_xhts.mpcl
+// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_xhts.mpcl
 
 type Garbler struct {
 	modP      uint512
@@ -41,20 +51,13 @@ func main(g Garbler, e Evaluator) []byte {
 	HS := hmac.SumSHA256(bytesDHE[:], g.dES)
 
 	// compute SHTS
-	var H2 [55]byte
+	var mH2 [55]byte
 	// must be set individually because 0x00 start is discarded when parsed
-	H2[0] = 0x00
+	mH2[0] = 0x00
 	for i := 1; i < 55; i++ {
-		H2[i] = e.hTwo[i-1]
+		mH2[i] = e.hTwo[i-1]
 	}
-	return hmac.SumSHA256(H2[:], HS)
-}
-
-func memcpy(dst []byte, dstOfs int, src []byte, srcOfs int) []byte {
-	for i := 0; srcOfs+i < len(src) && dstOfs+i < len(dst); i++ {
-		dst[dstOfs+i] = src[srcOfs+i]
-	}
-	return dst
+	return hmac.SumSHA256(mH2[:], HS)
 }
 
 func byteToUint512(x [64]byte) uint512 {
