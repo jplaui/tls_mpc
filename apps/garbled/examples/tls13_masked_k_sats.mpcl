@@ -3,7 +3,6 @@
 package main
 
 import (
-	"crypto/aes"
 	"crypto/hmac"
 )
 
@@ -15,8 +14,6 @@ import (
 // dHS: 70ee9987162bea6719acab976843acf95514f46d19872c2fabfa1a7bf32c5025
 // MS: b02d8f9d19b3ae1ba8d00106dac1ed6b2ea55da3fae83b1f66677fa6a781755f
 // SATS: b334fa6ef436aa7767b48ca30dfc567de973ecc692b7da661f486f25754de6c1
-// ECB1: 895b8c63da8da17e9d6d30c62f09d6f5
-// ECBK: 9b89f7120fe41972a4e81f2e63453807
 // serverIv: cac3cc248a5e1db3ebbd2a8a
 // serverKey: 2ca886649783b6cd626a4b04a96be1ef
 // masked server key: d5ad091155c804d0f135f394a376ed7f (mask: 4647eb76ffd794580046acf096d6b7a2)
@@ -34,13 +31,14 @@ import (
 
 // secret mask (16 bytes): 0x4647eb76ffd794580046acf096d6b7a2
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_ecb_response.mpcl
-// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_ecb_response.mpcl
+// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_masked_k_sats.mpcl
+// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba,0x4647eb76ffd794580046acf096d6b7a2 examples/tls13_masked_k_sats.mpcl
 
 type Garbler struct {
 	modP      uint512
 	privShare uint512
 	dES       [32]byte
+	mask      [16]byte
 }
 
 type Evaluator struct {
@@ -69,8 +67,8 @@ func main(g Garbler, e Evaluator) ([]byte, []byte) {
 	dHS := hmac.SumSHA256(mH0[:], HS)
 
 	// compute MS
-	var zeros32 [32]byte
-	MS := hmac.SumSHA256(zeros32[:], dHS)
+	var zeros [32]byte
+	MS := hmac.SumSHA256(zeros[:], dHS)
 
 	// compute CATS
 	var mH3 [55]byte
@@ -96,15 +94,13 @@ func main(g Garbler, e Evaluator) ([]byte, []byte) {
 	}
 	key := hmac.SumSHA256(mKey[:], SATS)[:16]
 
-	// compute ecbk
-	var zeros16 [16]byte
-	ECBK := aes.Block128(key, zeros16)
+	// mask key with randomness of garbler
+	var keyMasked [16]byte
+	for i := 0; i < 16; i++ {
+		keyMasked[i] = key[i] ^ g.mask[i]
+	}
 
-	// compute ecb1
-	nonce := getNonce(iv, 1)
-	ECB1 := aes.Block128(key, nonce)
-
-	return ECBK, ECB1
+	return keyMasked[:], iv
 }
 
 func byteToUint512(x [64]byte) uint512 {
@@ -122,30 +118,6 @@ func uint512ToByte(x uint512) [64]byte {
 
 	for i := 0; i < 64; i++ {
 		r[63-i] = x & 0xff
-		x >>= 8
-	}
-	return r
-}
-
-func getNonce(iv [12]byte, counter uint32) [16]byte {
-	var nonce [16]byte
-	for i := 0; i < 12; i++ {
-		nonce[i] = iv[i]
-	}
-	// var counter uint32
-	// counter = 1
-	counterBytes := uint32ToByte(counter)
-	for i := 0; i < 4; i++ {
-		nonce[12+i] = counterBytes[i]
-	}
-	return nonce
-}
-
-func uint32ToByte(x uint32) [4]byte {
-	var r [4]byte
-
-	for i := 0; i < 4; i++ {
-		r[3-i] = x & 0xff
 		x >>= 8
 	}
 	return r
@@ -185,4 +157,68 @@ func uint32ToByte(x uint32) [4]byte {
 // 	fmt.Println(len(b.Bytes()))
 // 	fmt.Println("hex label:", hex.EncodeToString(b.Bytes()))
 // 	// f3479740bf7cf199c06b6464197b3e5730390a0da0227351eb26cc4fe42eee4e36363636363636363636363636363636363636363636363636363636363636362012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc90570100
+// }
+
+// playground code to generate mask (take 16 byte mask for key)
+// package main
+
+// import (
+// 	"crypto/rand"
+// 	"crypto/sha256"
+// 	"encoding/hex"
+// 	"fmt"
+// 	"io"
+// 	"os"
+
+// 	"golang.org/x/crypto/hkdf"
+// )
+
+// func getSalt(n int) []byte {
+// 	nonce := make([]byte, n)
+// 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
+// 		panic(err.Error())
+// 	}
+// 	return (nonce)
+
+// }
+
+// func main() {
+// 	hash := sha256.New
+// 	s := "The quick brown fox jumps over the lazy dog"
+// 	salt := getSalt(hash().Size())
+
+// 	info := []byte("")
+
+// 	argCount := len(os.Args[1:])
+
+// 	if argCount > 0 {
+// 		s = os.Args[1]
+// 	}
+// 	secret := []byte(s)
+
+// 	kdf := hkdf.New(hash, secret, salt, info)
+
+// 	key1 := make([]byte, 16)
+// 	_, _ = io.ReadFull(kdf, key1)
+
+// 	fmt.Printf("Secret: %s\n", s)
+// 	fmt.Printf("HKDF 16 byte key: %x\n", key1)
+
+// 	key2 := make([]byte, 32)
+// 	_, _ = io.ReadFull(kdf, key2)
+
+// 	fmt.Printf("HKDF 32 byte key: %x\n", key2)
+
+// 	maskedKey := "d5ad091155c804d0f135f394a376ed7f"
+// 	mask := "4647eb76ffd794580046acf096d6b7a2"
+// 	maskedKeyBytes, _ := hex.DecodeString(maskedKey)
+// 	maskBytes, _ := hex.DecodeString(mask)
+
+// 	key := make([]byte, 16)
+// 	for i := 0; i < 16; i++ {
+// 		key[i] = maskBytes[i] ^ maskedKeyBytes[i]
+// 	}
+
+// 	fmt.Println("recovered key:", hex.EncodeToString(key))
+
 // }
