@@ -17,8 +17,8 @@ import (
 // dHS: 70ee9987162bea6719acab976843acf95514f46d19872c2fabfa1a7bf32c5025
 // MS: b02d8f9d19b3ae1ba8d00106dac1ed6b2ea55da3fae83b1f66677fa6a781755f
 // SATS: b334fa6ef436aa7767b48ca30dfc567de973ecc692b7da661f486f25754de6c1
-// ECB1: 895b8c63da8da17e9d6d30c62f09d6f5
-// ECBK: 9b89f7120fe41972a4e81f2e63453807
+// ECB1: 895b8c63da8da17e9d6d30c62f09d6f5 // ecb1
+// ECBK: 9b89f7120fe41972a4e81f2e63453807 // ecb0
 // serverIv: cac3cc248a5e1db3ebbd2a8a
 // serverKey: 2ca886649783b6cd626a4b04a96be1ef
 // masked server key: d5ad091155c804d0f135f394a376ed7f (mask: 4647eb76ffd794580046acf096d6b7a2)
@@ -40,26 +40,47 @@ import (
 // server mIv: 0x000c08746c7331332069760001 (generated with 12)
 // server mKey: 0x001009746c733133206b65790001 (generated with 16)
 
+// Tests to derive SHTS:
+// dES: 0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba
+// cShare: 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac
+// pShare: 0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df
+// pModP: 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
+// HS: c571a176894ac7aff65d52522f4d0861060f3c3b96144567dd10fa79d218d878
+// hTwo=mH2=label+H2: 0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701
+// SHTS: 0x7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c
+// server Parity 2kB: 0xc5685aad8db5a694505599388d7fb8d8
+// parity mask: "0x4647eb76ffd794580046acf096d6b7a2"
+
 // secret mask (16 bytes): 0x4647eb76ffd794580046acf096d6b7a2
 
-// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba examples/tls13_ecb_kdc.mpcl
+// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba,0x7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c,0x9b89f7120fe41972a4e81f2e63453807,0x895b8c63da8da17e9d6d30c62f09d6f5,0x4647eb76ffd794580046acf096d6b7a2,0xc5685aad8db5a694505599388d7fb8d8 examples/tls13_hvzk.mpcl
 type Garbler struct {
-	modP      uint512
-	privShare uint512
-	dES       [32]byte
+	modP       uint512
+	privShare  uint512
+	dES        [32]byte
+	SHTS       [32]byte
+	ECB0       [32]byte
+	ECB1       [32]byte
+	parityMask [16]byte
+	Parity     [16]byte
 }
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_ecb_kdc.mpcl
+// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_hvzk.mpcl
 type Evaluator struct {
 	// privShare [32]byte
 	privShare uint512
+	hTwo      [55]byte
 	hZero     [50]byte
 	hThree    [55]byte
 	ivLabel   [13]byte
 	keyLabel  [14]byte
 }
 
-func main(g Garbler, e Evaluator) ([]byte, []byte, []byte) {
+func main(g Garbler, e Evaluator) uint8 {
+
+	// verification byte
+	// var valid byte
+	// valid := 0x01
 
 	// combine secret shares into DHE
 	DHE := (g.privShare + e.privShare) % g.modP
@@ -67,11 +88,21 @@ func main(g Garbler, e Evaluator) ([]byte, []byte, []byte) {
 	// compute HS
 	HS := hmac.SumSHA256(bytesDHE[:], g.dES)
 
-    // compute SHTS
-    // TODO
+	// compute SHTS
+	var mH2 [55]byte
+	// must be set individually because 0x00 start is discarded when parsed
+	mH2[0] = 0x00
+	for i := 1; i < 55; i++ {
+		mH2[i] = e.hTwo[i-1]
+	}
+	SHTS := hmac.SumSHA256(mH2[:], HS)
 
-    // check SHTS against public input
-    // TODO
+	// check SHTS against public input
+	for i := 0; i < 32; i++ {
+		if (SHTS[i] ^ g.SHTS[i]) != 0x00 {
+			return 0x00
+		}
+	}
 
 	// compute dHS
 	var mH0 [50]byte
@@ -109,36 +140,97 @@ func main(g Garbler, e Evaluator) ([]byte, []byte, []byte) {
 	}
 	key := hmac.SumSHA256(mKey[:], SATS)[:16]
 
-	// compute ecbk, ecb1
+	// compute ecbs
 	var zeros16 [16]byte
 	ECBK := aes.Block128(key, zeros16)
 	nonce := getNonce(iv, 1)
 	ECB1 := aes.Block128(key, nonce)
+	var counter [aes.BlockSize]byte
+	counter = memcpy(counter, 0, iv, 0)
+	counter = incr(counter)
+	// e0 := byteToUint128(aes.Block128(key, counter))
+	// h := byteToUint128(aes.Block128(key, block))
 
-    // match ecbk, ecb1 against public input
-    // TODO
-
-	// compute two example chunks to verify if ECB computation for record data works
-	nonce2 := getNonce(iv, 32)
-	ECB32 := aes.Block128(key, nonce2)
-
-	nonce3 := getNonce(iv, 33)
-	ECB33 := aes.Block128(key, nonce3)
-
-	// return value
-	var ecbs [32]byte
+	// match ecb0, ecb1 against public input
 	for i := 0; i < 16; i++ {
-		ecbs[i] = ECB32[i]
-		ecbs[16+i] = ECB33[i]
+		if (ECB1[i] ^ g.ECB1[i]) != 0x00 {
+			return 0x00
+		}
+		if (ECBK[i] ^ g.ECB0[i]) != 0x00 {
+			return 0x00
+		}
 	}
 
-    // hash snark friendly! ecbs
-    // TODO
+	var block [aes.BlockSize]byte
+	numberECBs := (125 * 16)
+	// var ecbVector [numberECBs]byte
+	var parityChecksum [aes.BlockSize]byte
 
-    // compare ecb hash with public input
-    // TODO
+	for i := 0; i < numberECBs; i += aes.BlockSize {
+		counter = incr(counter)
+		block = aes.Block128(key, counter)
+		for j := 0; j < aes.BlockSize; j++ {
+			parityChecksum[j] = parityChecksum[j] ^ block[j]
+		}
+	}
 
-	return ECBK, ECB1, ecbs
+	// add parity mask
+	for i := 0; i < 16; i++ {
+		parityChecksum[i] = parityChecksum[i] ^ g.parityMask[i]
+	}
+
+	// compare parity checksum
+	for i := 0; i < 16; i++ {
+		if (parityChecksum[i] ^ g.Parity[i]) != 0 {
+			return 0x00
+		}
+	}
+
+	// var temp [1]byte
+	// temp[0] = 0x01
+	return 0x01
+}
+
+func byteToUint128(x [16]byte) uint128 {
+	var r uint128
+
+	for i := 0; i < len(x); i++ {
+		r <<= 8
+		r |= uint128(x[i])
+	}
+	return r
+}
+
+func uint128ToByte(x uint128) [16]byte {
+	var r [16]byte
+
+	for i := 0; i < 16; i++ {
+		r[15-i] = x & 0xff
+		x >>= 8
+	}
+	return r
+}
+
+func incr(counter [aes.BlockSize]byte) [aes.BlockSize]byte {
+	var c uint32
+
+	for i := 0; i < 4; i++ {
+		c <<= 8
+		c |= uint32(counter[12+i])
+	}
+	c++
+	for i := 0; i < 4; i++ {
+		counter[15-i] = c & 0xff
+		c >>= 8
+	}
+	return counter
+}
+
+func memcpy(dst []byte, dstOfs int, src []byte, srcOfs int) []byte {
+	for i := 0; srcOfs+i < len(src) && dstOfs+i < len(dst); i++ {
+		dst[dstOfs+i] = src[srcOfs+i]
+	}
+	return dst
 }
 
 func byteToUint512(x [64]byte) uint512 {

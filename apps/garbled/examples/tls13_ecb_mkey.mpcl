@@ -4,7 +4,6 @@ package main
 
 import (
 	"crypto/aes"
-	"crypto/hmac"
 )
 
 // these sample values compute response (server side kdc) data ecbs
