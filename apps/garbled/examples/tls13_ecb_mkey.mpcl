@@ -43,19 +43,21 @@ import (
 // secret mask1 (16 bytes): 0x4647eb76ffd794580046acf096d6b7a2
 // tmp: 4082b187e6b70544b011f80bed4c686b
 
-// MPCLDIR=./../../ ./garbled -v -i 0x4647eb76ffd794580046acf096d6b7a2 examples/tls13_resp_ecb_maskedkey.mpcl
+// MPCLDIR=./../../ ./garbled -v -i 0x4647eb76ffd794580046acf096d6b7a2 examples/tls13_ecb_mkey.mpcl
 type Garbler struct {
 	mask [16]byte
 }
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x6aef6d1268542295622ce7f43fbd564d,0xcac3cc248a5e1db3ebbd2a8a examples/tls13_resp_ecb_maskedkey.mpcl
+// MPCLDIR=./../../ ./garbled -e -v -i 0x6aef6d1268542295622ce7f43fbd564d,0xcac3cc248a5e1db3ebbd2a8a examples/tls13_ecb_mkey.mpcl
 type Evaluator struct {
 	maskedKey [16]byte
 	iv        [12]byte
 }
 
+// 2kB, set 125 ecbs
+
 // return: protected ecbk,ecb1, and ecbs with counter>1 in one slice
-func main(g Garbler, e Evaluator) []byte {
+func main(g Garbler, e Evaluator) (uint128, uint128, []byte) {
 
 	// combine mask and key
 	var key [16]byte
@@ -63,29 +65,93 @@ func main(g Garbler, e Evaluator) []byte {
 		key[i] = e.maskedKey[i] ^ g.mask[i]
 	}
 
+	var counter [aes.BlockSize]byte
+	counter = memcpy(counter, 0, e.iv, 0)
+	counter = incr(counter)
+	e0 := byteToUint128(aes.Block128(key, counter))
+	var block [aes.BlockSize]byte
+	// h = E(k, 0^128)
+	h := byteToUint128(aes.Block128(key, block))
+
+	numberECBs := (125 * 16)
+	// ecbVector := make([]byte, numberECBs+16)
+	var ecbVector [numberECBs]byte
+
+	for i := 0; i < numberECBs; i += aes.BlockSize {
+		counter = incr(counter)
+		block = aes.Block128(key, counter)
+		for j := 0; i+j < numberECBs && j < aes.BlockSize; j++ {
+			ecbVector[i+j] = block[j]
+		}
+	}
+
+	return e0, h, ecbVector[:]
+
 	// compute authtag ecbs (ecbk, ecb1)
-	var zeros16 [16]byte
-	ECBK := aes.Block128(key, zeros16)
-	nonce := getNonce(e.iv, 1)
-	ECB1 := aes.Block128(key, nonce)
+	// var zeros16 [16]byte
+	// ECBK := aes.Block128(key, zeros16)
+	// nonce := getNonce(e.iv, 1)
+	// ECB1 := aes.Block128(key, nonce)
 
 	// compute two example chunks to verify if ECB computation for record data works
-	nonce2 := getNonce(e.iv, 32)
-	ECB32 := aes.Block128(key, nonce2)
-	nonce3 := getNonce(e.iv, 33)
-	ECB33 := aes.Block128(key, nonce3)
+	// nonce2 := getNonce(e.iv, 32)
+	// ECB32 := aes.Block128(key, nonce2)
+	// nonce3 := getNonce(e.iv, 33)
+	// ECB33 := aes.Block128(key, nonce3)
 	// add as many ecbs as required...
 
 	// fill output slice
-	var ecbs [64]byte
-	for i := 0; i < 16; i++ {
-		ecbs[i] = ECBK[i]
-		ecbs[16+i] = ECB1[i]
-		ecbs[32+i] = ECB32[i]
-		ecbs[48+i] = ECB33[i]
-	}
+	// var ecbs [64]byte
+	// for i := 0; i < 16; i++ {
+	// 	ecbs[i] = ECBK[i]
+	// 	ecbs[16+i] = ECB1[i]
+	// 	ecbs[32+i] = ECB32[i]
+	// 	ecbs[48+i] = ECB33[i]
+	// }
 
-	return ecbs
+	// return ecbs
+}
+
+func byteToUint128(x [16]byte) uint128 {
+	var r uint128
+
+	for i := 0; i < len(x); i++ {
+		r <<= 8
+		r |= uint128(x[i])
+	}
+	return r
+}
+
+func uint128ToByte(x uint128) [16]byte {
+	var r [16]byte
+
+	for i := 0; i < 16; i++ {
+		r[15-i] = x & 0xff
+		x >>= 8
+	}
+	return r
+}
+
+func incr(counter [aes.BlockSize]byte) [aes.BlockSize]byte {
+	var c uint32
+
+	for i := 0; i < 4; i++ {
+		c <<= 8
+		c |= uint32(counter[12+i])
+	}
+	c++
+	for i := 0; i < 4; i++ {
+		counter[15-i] = c & 0xff
+		c >>= 8
+	}
+	return counter
+}
+
+func memcpy(dst []byte, dstOfs int, src []byte, srcOfs int) []byte {
+	for i := 0; srcOfs+i < len(src) && dstOfs+i < len(dst); i++ {
+		dst[dstOfs+i] = src[srcOfs+i]
+	}
+	return dst
 }
 
 func byteToUint512(x [64]byte) uint512 {
