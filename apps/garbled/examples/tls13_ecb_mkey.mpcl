@@ -54,6 +54,8 @@ type Evaluator struct {
 }
 
 // 2kB, set 125 ecbs
+// 16kB, set 1000 ecbs
+// 256B, set 16 ecbs
 
 // return: protected ecbk,ecb1, and ecbs with counter>1 in one slice
 func main(g Garbler, e Evaluator) (uint128, uint128, []byte) {
@@ -72,7 +74,7 @@ func main(g Garbler, e Evaluator) (uint128, uint128, []byte) {
 	// h = E(k, 0^128)
 	h := byteToUint128(aes.Block128(key, block))
 
-	numberECBs := (125 * 16)
+	numberECBs := (1000 * 16)
 	// ecbVector := make([]byte, numberECBs+16)
 	var ecbVector [numberECBs]byte
 

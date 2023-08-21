@@ -55,6 +55,8 @@ type Evaluator struct {
 }
 
 // 2kB, set 125 ecbs
+// 16kB, set 100 ecbs
+// 256B, set 16 ecbs
 
 // return: protected ecbk,ecb1, and ecbs with counter>1 in one slice
 func main(g Garbler, e Evaluator) []byte {
@@ -66,7 +68,7 @@ func main(g Garbler, e Evaluator) []byte {
 	}
 
 	// indicate the number of ECBs
-	numberECBs := (125 * 16)
+	numberECBs := (16 * 16)
 
 	var counter [aes.BlockSize]byte
 	counter = memcpy(counter, 0, e.iv, 0)
