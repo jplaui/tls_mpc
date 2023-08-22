@@ -42,12 +42,14 @@ import (
 // secret mask1 (16 bytes): 0x4647eb76ffd794580046acf096d6b7a2
 // tmp: 4082b187e6b70544b011f80bed4c686b
 
-// MPCLDIR=./../../ ./garbled -v -i 0x4647eb76ffd794580046acf096d6b7a2 examples/tls13_ecb_mkey.mpcl
+// server MPCLDIR=./../../ ./garbled -v -i 0x4647eb76ffd794580046acf096d6b7a2 examples/tls13_ecb_mkey.mpcl
+// client MPCLDIR=./../../ ./garbled -v -i 0x4647eb76ffd794580046acf096d6b7a2 examples/tls13_ecb_mkey.mpcl
 type Garbler struct {
 	mask [16]byte
 }
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x6aef6d1268542295622ce7f43fbd564d,0xcac3cc248a5e1db3ebbd2a8a examples/tls13_ecb_mkey.mpcl
+// server MPCLDIR=./../../ ./garbled -e -v -i 0x6aef6d1268542295622ce7f43fbd564d,0xcac3cc248a5e1db3ebbd2a8a examples/tls13_ecb_mkey.mpcl
+// client MPCLDIR=./../../ ./garbled -e -v -i 0xd5ad091155c804d0f135f394a376ed7f,0xd06ac7f19c2b18e01a62686e examples/tls13_ecb_mkey.mpcl
 type Evaluator struct {
 	maskedKey [16]byte
 	iv        [12]byte
@@ -74,7 +76,7 @@ func main(g Garbler, e Evaluator) (uint128, uint128, []byte) {
 	// h = E(k, 0^128)
 	h := byteToUint128(aes.Block128(key, block))
 
-	numberECBs := (1000 * 16)
+	numberECBs := (16 * 16)
 	// ecbVector := make([]byte, numberECBs+16)
 	var ecbVector [numberECBs]byte
 
