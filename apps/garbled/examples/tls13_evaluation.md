@@ -64,6 +64,11 @@ Circuit: #gates=588309 (XOR=485906 XNOR=0 AND=102401 OR=1 INV=1 xor=485906 !xor=
 │ ╰╴Flcd  │             │        │   89 │
 └─────────┴─────────────┴────────┴──────┘
 
+exec offline: 28,50+5,38+0,018 = 33.89 ms
+exec online: 17,27+16,32+0,21 = 33.8 ms
+com offline: 5+0,063 = 5.06 MB
+com online: 33+25 = 58 kB
+
 #### tls13_ecb_2plus.mpcl (2 kB ECBs)
 Circuit: #gates=4595446 (XOR=3795443 XNOR=0 AND=800001 OR=1 INV=1 xor=3795443 !xor=800003 levels=311 width=23019) #w=4595798
 
@@ -90,19 +95,25 @@ com online: 258+25 = 283 kB
 #### tls13_ecb_2plus.mpcl (16 kB ECBs)
 Circuit: #gates=36764075 (XOR=30364072 XNOR=0 AND=6400001 OR=1 INV=1 xor=30364072 !xor=6400003 levels=311 width=183818) #w=36764427
 
-┌────────┬──────────────┬────────┬───────┐
-│ Op     │         Time │      % │  Xfer │
-├────────┼──────────────┼────────┼───────┤
-│ Wait   │ 3.197972125s │ 52.39% │       │
-│ Recv   │ 1.748983417s │ 28.65% │ 351MB │
-│ Inputs │  32.314333ms │  0.53% │  25kB │
-│ Eval   │ 697.039917ms │ 11.42% │       │
-│ Result │ 427.544333ms │  7.00% │   2MB │
-│ Total  │ 6.103854125s │        │ 353MB │
-│ ├╴Sent │              │  0.58% │   2MB │
-│ ├╴Rcvd │              │ 99.42% │ 351MB │
-│ ╰╴Flcd │              │        │    34 │
-└────────┴──────────────┴────────┴───────┘
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │  3.08466125s │ 53.36% │       │
+│ Xfer    │    1.172634s │ 20.28% │ 351MB │
+│ OT Init │     19.167µs │  0.00% │  13kB │
+│ OT      │  30.559125ms │  0.53% │  25kB │
+│ Eval    │ 1.060292791s │ 18.34% │       │
+│ Result  │    432.788ms │  7.49% │   2MB │
+│ Total   │ 5.780954333s │        │ 353MB │
+│ ├╴Sent  │              │ 99.42% │ 351MB │
+│ ├╴Rcvd  │              │  0.58% │   2MB │
+│ ╰╴Flcd  │              │        │  5373 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline: 3,08+1,17 = 4.25 s
+exec online: 0,030+1,06+0,432 = 1.52 s
+com offline: 351+0,013 = 351.01 MB
+com online: 2+0,025 = 2.02 kB
 
 #### tls13_ecb_auth_mkey.mpcl (constant)
 Circuit: #gates=73554 (XOR=60751 XNOR=0 AND=12801 OR=1 INV=1 xor=60751 !xor=12803 levels=310 width=377) #w=73906
@@ -122,6 +133,11 @@ Circuit: #gates=73554 (XOR=60751 XNOR=0 AND=12801 OR=1 INV=1 xor=60751 !xor=1280
 │ ╰╴Flcd  │             │        │    14 │
 └─────────┴─────────────┴────────┴───────┘
 
+exec offline: 4,13+0,53+0,012 = 4.67 ms
+exec online: 15,55+10,87+0,03 = 26.45 ms
+com offline: 655+50 = 705 kB
+com online: 25+4 = 29 kB
+
 #### tls13_ecb_mkey.mpcl (256B ECBs)
 Circuit: #gates=661732 (XOR=546529 XNOR=0 AND=115201 OR=1 INV=1 xor=546529 !xor=115203 levels=311 width=3284) #w=662084
 
@@ -139,6 +155,11 @@ Circuit: #gates=661732 (XOR=546529 XNOR=0 AND=115201 OR=1 INV=1 xor=546529 !xor=
 │ ├╴Rcvd  │             │  0.83% │ 52kB │
 │ ╰╴Flcd  │             │        │  100 │
 └─────────┴─────────────┴────────┴──────┘
+
+exec offline: 32.44+5.14+0,013 = 37.59 ms
+exec online: 17,94+18,50+0,27 = 36.71 ms
+com offline: 6+0,044 = 6.04 MB
+com online: 25+37 = 62 kB
 
 #### tls13_ecb_mkey.mpcl (2 kB ECBs)
 Circuit: #gates=4668869 (XOR=3856066 XNOR=0 AND=812801 OR=1 INV=1 xor=3856066 !xor=812803 levels=311 width=23363) #w=4669221
@@ -184,36 +205,48 @@ Circuit: #gates=36837498 (XOR=30424695 XNOR=0 AND=6412801 OR=1 INV=1 xor=3042469
 #### tls13_parity.mpcl (256 B ECBs)
 Circuit: #gates=2048 (XOR=2048 XNOR=0 AND=0 OR=0 INV=0 xor=2048 !xor=0 levels=16 width=128) #w=4224
 
-┌────────┬──────────────┬────────┬───────┐
-│ Op     │         Time │      % │  Xfer │
-├────────┼──────────────┼────────┼───────┤
-│ Wait   │   2.085333ms │  1.01% │       │
-│ Recv   │     48.334µs │  0.02% │  10kB │
-│ Inputs │ 204.113708ms │ 98.80% │ 229kB │
-│ Eval   │     29.333µs │  0.01% │       │
-│ Result │    308.959µs │  0.15% │   2kB │
-│ Total  │ 206.585667ms │        │ 241kB │
-│ ├╴Sent │              │ 61.83% │ 149kB │
-│ ├╴Rcvd │              │ 38.17% │  92kB │
-│ ╰╴Flcd │              │        │     5 │
-└────────┴──────────────┴────────┴───────┘
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │   1.681041ms │  0.83% │       │
+│ Xfer    │     34.959µs │  0.02% │    0B │
+│ OT Init │      5.625µs │  0.00% │  10kB │
+│ OT      │ 114.432833ms │ 56.57% │ 229kB │
+│ Eval    │     86.128ms │ 42.57% │       │
+│ Result  │     18.542µs │  0.01% │   2kB │
+│ Total   │    202.301ms │        │ 241kB │
+│ ├╴Sent  │              │ 38.17% │  92kB │
+│ ├╴Rcvd  │              │ 61.83% │ 149kB │
+│ ╰╴Flcd  │              │        │     5 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline: 1,68+0,03 = 1.71 ms
+exec online: 114,43+86,12+0,018 = 200.56 ms
+com offline: 10 = 10 kB
+com online: 229+2 = 231 kB
 
 #### tls13_parity.mpcl (2 kB ECBs)
 Circuit: #gates=16000 (XOR=16000 XNOR=0 AND=0 OR=0 INV=0 xor=16000 !xor=0 levels=125 width=128) #w=32128
 
-┌────────┬──────────────┬────────┬───────┐
-│ Op     │         Time │      % │  Xfer │
-├────────┼──────────────┼────────┼───────┤
-│ Wait   │     8.6445ms │  0.60% │       │
-│ Recv   │    128.458µs │  0.01% │  66kB │
-│ Inputs │ 1.429801625s │ 99.36% │   1MB │
-│ Eval   │    164.208µs │  0.01% │       │
-│ Result │    284.917µs │  0.02% │   2kB │
-│ Total  │ 1.439023708s │        │   1MB │
-│ ├╴Sent │              │ 62.03% │   1MB │
-│ ├╴Rcvd │              │ 37.97% │ 706kB │
-│ ╰╴Flcd │              │        │    20 │
-└────────┴──────────────┴────────┴───────┘
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │   8.545917ms │  0.59% │       │
+│ Xfer    │     70.458µs │  0.00% │  65kB │
+│ OT Init │      3.625µs │  0.00% │  569B │
+│ OT      │ 761.379917ms │ 52.94% │   1MB │
+│ Eval    │ 668.155083ms │ 46.46% │       │
+│ Result  │     27.833µs │  0.00% │   2kB │
+│ Total   │ 1.438182833s │        │   1MB │
+│ ├╴Sent  │              │ 37.96% │ 706kB │
+│ ├╴Rcvd  │              │ 62.04% │   1MB │
+│ ╰╴Flcd  │              │        │    14 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline: 8,54+0,07 = 8.61 ms
+exec online: 761,37+668,15+0,027 = 1.42 s
+com offline: 65+0,569 = 65.56 kB
+com online: 1+0,002 = 1 MB
 
 #### tls13_hvzk.mpcl (2 kB ECBs -- response)
 Circuit: #gates=10371339 (XOR=8424911 XNOR=0 AND=1945866 OR=561 INV=1 xor=8424911 !xor=1946428 levels=863327 width=22205) #w=10375651
@@ -233,6 +266,11 @@ Circuit: #gates=10371339 (XOR=8424911 XNOR=0 AND=1945866 OR=561 INV=1 xor=842491
 │ ╰╴Flcd  │              │        │  1589 │
 └─────────┴──────────────┴────────┴───────┘
 
+exec offline: 545,87+125,15+0,013 = 671.03 ms
+exec online: 113,61+210,06+0,014 = 323.68 ms
+com offline: 103+0,013 = 103.01 MB
+com online: 224+0,133 = 224.13 kB
+
 #### tls13_hvzk.mpcl (16 kB ECBs -- response)
 Circuit: #gates=42539968 (XOR=34993540 XNOR=0 AND=7545866 OR=561 INV=1 xor=34993540 !xor=7546428 levels=864202 width=175330) #w=42544280
 
@@ -251,23 +289,33 @@ Circuit: #gates=42539968 (XOR=34993540 XNOR=0 AND=7545866 OR=561 INV=1 xor=34993
 │ ╰╴Flcd  │              │        │  6287 │
 └─────────┴──────────────┴────────┴───────┘
 
+exec offline: 3.49+0,79 = 4.28 s
+exec online: 121,80+971,53+0,03 = 1.09 s
+com offline: 411+0,015 = 411.01 MB
+com online: 224+0,133 = 224.13 kB
+
 #### tls13_hvzk.mpcl (256B ECBs -- request)
-Circuit: #gates=6364202 (XOR=5115374 XNOR=0 AND=1248266 OR=561 INV=1 xor=5115374 !xor=1248828 levels=863218 width=3130) #w=6368514
+Circuit: #gates=6290491 (XOR=5054719 XNOR=0 AND=1235434 OR=337 INV=1 xor=5054719 !xor=1235772 levels=863154 width=2800) #w=6294291
 
 ┌─────────┬──────────────┬────────┬───────┐
 │ Op      │         Time │      % │  Xfer │
 ├─────────┼──────────────┼────────┼───────┤
-│ Garble  │ 307.969291ms │ 46.40% │       │
-│ Xfer    │  79.072959ms │ 11.91% │  65MB │
-│ OT Init │     12.333µs │  0.00% │  63kB │
-│ OT      │    109.467ms │ 16.49% │ 224kB │
-│ Eval    │  167.24825ms │ 25.20% │       │
-│ Result  │     19.875µs │  0.00% │  133B │
-│ Total   │ 663.789708ms │        │  65MB │
-│ ├╴Sent  │              │ 99.78% │  65MB │
+│ Garble  │ 337.180041ms │ 50.00% │       │
+│ Xfer    │  73.498292ms │ 10.90% │  64MB │
+│ OT Init │     11.417µs │  0.00% │  60kB │
+│ OT      │    112.031ms │ 16.61% │ 224kB │
+│ Eval    │ 151.639583ms │ 22.49% │       │
+│ Result  │         18µs │  0.00% │  133B │
+│ Total   │ 674.378333ms │        │  64MB │
+│ ├╴Sent  │              │ 99.78% │  64MB │
 │ ├╴Rcvd  │              │  0.22% │ 144kB │
-│ ╰╴Flcd  │              │        │  1003 │
+│ ╰╴Flcd  │              │        │   992 │
 └─────────┴──────────────┴────────┴───────┘
+
+exec offline: 337,18+0,73 = 337.91 ms
+exec online: 112,03+151,63+0,018 = 263.67 ms
+com offline: 64+0,06 = 64.06 MB
+com online: 224+0,133 = 224.13 kB
 
 #### tls13_hvzk.mpcl (kdc, shts, 16kB response ecb parity with ecb01, 256 B request ecb parity)
 Circuit: #gates=44680687 (XOR=36770078 XNOR=0 AND=7909935 OR=673 INV=1 xor=36770078 !xor=7910609 levels=864203 width=178130) #w=44685567
@@ -287,6 +335,11 @@ Circuit: #gates=44680687 (XOR=36770078 XNOR=0 AND=7909935 OR=673 INV=1 xor=36770
 │ ╰╴Flcd  │              │        │  6595 │
 └─────────┴──────────────┴────────┴───────┘
 
+exec offline: 4,43+0,85 = 5.28 s
+exec online: 259,22+642,84+0,04 = 902.1 ms
+com offline: 431+0,052 = 431.05 MB
+com online: 274+0,133 = 274.13 kB
+
 #### tls13_tag.mpcl (256B ciphertext as input)
 Circuit: #gates=2020785 (XOR=1455261 XNOR=0 AND=565522 OR=1 INV=1 xor=1455261 !xor=565524 levels=9011 width=1584) #w=2023185
 
@@ -304,6 +357,11 @@ Circuit: #gates=2020785 (XOR=1455261 XNOR=0 AND=565522 OR=1 INV=1 xor=1455261 !x
 │ ├╴Rcvd  │              │  0.63% │ 165kB │
 │ ╰╴Flcd  │              │        │   404 │
 └─────────┴──────────────┴────────┴───────┘
+
+exec offline: 119,33+23,65+0,013 = 142.99 ms, times 2 = 285.98 ms
+exec online: 121,67+124,42+0,034 = 246.12 ms, times 2 = 492.24 ms
+com offline: 26+0,034 = 26.03 MB, times 2 = 52.06 MB
+com online: 254+2 = 256 kB, times 2 = 512 MB
 
 #### tls13_tag.mpcl (1.6 kB ciphertext as input)
 Circuit: #gates=11643659 (XOR=8347043 XNOR=0 AND=3296614 OR=1 INV=1 xor=8347043 !xor=3296616 levels=52019 width=7632) #w=11656811
