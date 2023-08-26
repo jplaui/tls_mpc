@@ -5,6 +5,7 @@ package main
 import (
 	"crypto/aes"
 	"crypto/hmac"
+	"crypto/sha256"
 )
 
 // sample values for request computation
@@ -78,22 +79,21 @@ import (
 
 // secret mask (16 bytes): 0x4647eb76ffd794580046acf096d6b7a2
 
-// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba,0x7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c,0x9b89f7120fe41972a4e81f2e63453807,0x895b8c63da8da17e9d6d30c62f09d6f5,0xf8895999038a3cb1169a882ebba33ca5,0xf0cecf8cdd4452c1f77a297cff13a605,0x4647eb76ffd794580046acf096d6b7a2,0x03c5c032c848a055816d588ea53d15c1,0x29e0ecc058100b2ee776904b2b265495 examples/tls13_hvzk_total.mpcl
+// MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba,0x7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c,0x9b89f7120fe41972a4e81f2e63453807,0x895b8c63da8da17e9d6d30c62f09d6f5,0xf8895999038a3cb1169a882ebba33ca5,0xf0cecf8cdd4452c1f77a297cff13a605,0x9d50ae1106944e02565772384ee3ace09752ef6bd4715a4499ea3eb0fe5c8c07,0xbf90d4148ef4d053470e8a30309e373be83bcfce64d61b7ad31a7d187c1d8256 examples/tls13_hvzk_transparent.mpcl
 type Garbler struct {
-	modP       uint512
-	privShare  uint512
-	dES        [32]byte
-	SHTS       [32]byte
-	ECB0       [32]byte
-	ECB1       [32]byte
-	cECB0      [32]byte
-	cECB1      [32]byte
-	parityMask [16]byte
-	Parity     [16]byte
-	ParityC    [16]byte
+	modP      uint512
+	privShare uint512
+	dES       [32]byte
+	SHTS      [32]byte
+	ECB0      [32]byte
+	ECB1      [32]byte
+	cECB0     [32]byte
+	cECB1     [32]byte
+	Hash1     [32]byte // 9d50ae1106944e02565772384ee3ace09752ef6bd4715a4499ea3eb0fe5c8c07
+	Hash2     [32]byte // bf90d4148ef4d053470e8a30309e373be83bcfce64d61b7ad31a7d187c1d8256
 }
 
-// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x002012746c7331332063206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_hvzk_total.mpcl
+// MPCLDIR=./../../ ./garbled -e -v -i 0x677f7ff26ac202469e1a2d39dc001c5e7fcfb1f967a3cb4affa51185facc57ac,0x002012746c7331332073206873207472616666696320825e4f79bbcb0e8adb287cac19c378145b7d6c465734422da6882463eadc905701,0x00200d746c733133206465726976656420e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85501,0x002012746c7331332073206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x002012746c7331332063206170207472616666696320803fe80818374bc995571054979e54a316f266b4908ed43f5df4752bdef093b801,0x000c08746c7331332069760001,0x001009746c733133206b65790001 examples/tls13_hvzk_transparent.mpcl
 type Evaluator struct {
 	// privShare [32]byte
 	privShare uint512
@@ -214,28 +214,27 @@ func main(g Garbler, e Evaluator) uint8 {
 		}
 	}
 
-	// server side request ecb verification
+	// server side response ecb verification
 	var block [aes.BlockSize]byte
 	numberECBs := (1000 * 16)
 	// var ecbVector [numberECBs]byte
-	var parityChecksum [aes.BlockSize]byte
+	var ecbs1 [numberECBs]byte
 
+	// loop increments with 16 step size
 	for i := 0; i < numberECBs; i += aes.BlockSize {
 		counter = incr(counter)
 		block = aes.Block128(key, counter)
 		for j := 0; j < aes.BlockSize; j++ {
-			parityChecksum[j] = parityChecksum[j] ^ block[j]
+			ecbs1[i+j] = block[j]
 		}
 	}
 
-	// add parity mask
-	for i := 0; i < 16; i++ {
-		parityChecksum[i] = parityChecksum[i] ^ g.parityMask[i]
-	}
+	// compute hash on ECBs
+	ecbHash1 := sha256.Sum256(ecbs1[:])
 
-	// compare parity checksum
-	for i := 0; i < 16; i++ {
-		if (parityChecksum[i] ^ g.Parity[i]) != 0 {
+	// compare hash
+	for i := 0; i < 32; i++ {
+		if (ecbHash1[i] ^ g.Hash1[i]) != 0 {
 			return 0x00
 		}
 	}
@@ -243,8 +242,7 @@ func main(g Garbler, e Evaluator) uint8 {
 	// client request parity check, no need to verify SHTS twice and must not check ecb0,ecb1
 	var block2 [aes.BlockSize]byte
 	numberECBs2 := (16 * 16)
-	// var ecbVector [numberECBs]byte
-	var parityChecksum2 [aes.BlockSize]byte
+	var ecbs2 [numberECBs2]byte
 
 	var counter2 [aes.BlockSize]byte
 	counter2 = memcpy(counter2, 0, civ, 0)
@@ -253,18 +251,16 @@ func main(g Garbler, e Evaluator) uint8 {
 		counter2 = incr(counter2)
 		block2 = aes.Block128(ckey, counter2)
 		for j := 0; j < aes.BlockSize; j++ {
-			parityChecksum2[j] = parityChecksum2[j] ^ block2[j]
+			ecbs2[i+j] = block2[j]
 		}
 	}
 
-	// add parity mask
-	for i := 0; i < 16; i++ {
-		parityChecksum2[i] = parityChecksum2[i] ^ g.parityMask[i]
-	}
+	// compute hash on ECBs
+	ecbHash2 := sha256.Sum256(ecbs2[:])
 
-	// compare parity checksum
-	for i := 0; i < 16; i++ {
-		if (parityChecksum2[i] ^ g.ParityC[i]) != 0 {
+	// compare hash
+	for i := 0; i < 32; i++ {
+		if (ecbHash2[i] ^ g.Hash2[i]) != 0 {
 			return 0x00
 		}
 	}

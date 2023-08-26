@@ -76,14 +76,14 @@ import (
 
 // secret mask (16 bytes): 0x4647eb76ffd794580046acf096d6b7a2
 
-// client MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba,0x7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c,0x4647eb76ffd794580046acf096d6b7a2,0x29e0ecc058100b2ee776904b2b265495 examples/tls13_hvzk_256B.mpcl
+// client MPCLDIR=./../../ ./garbled -v -i 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff,0xfbe470a4a1e11bbaa2ebb9da082924f99a20681e5feed0000e2d2b5e613d22df,0x6f2615a108c702c5678f54fc9dbab69716c076189c48250cebeac3576c3611ba,0x7691bca4c1a92ffc70efe68a178d928540f47254512c290693fbc2a8c28ab59c,0xf8895999038a3cb1169a882ebba33ca5,0xf0cecf8cdd4452c1f77a297cff13a605,0x4647eb76ffd794580046acf096d6b7a2,0x29e0ecc058100b2ee776904b2b265495 examples/tls13_hvzk_256B.mpcl
 type Garbler struct {
-	modP      uint512
-	privShare uint512
-	dES       [32]byte
-	SHTS      [32]byte
-	// ECB0       [32]byte // 0xf8895999038a3cb1169a882ebba33ca5
-	// ECB1       [32]byte // 0xf0cecf8cdd4452c1f77a297cff13a605
+	modP       uint512
+	privShare  uint512
+	dES        [32]byte
+	SHTS       [32]byte
+	ECB0       [32]byte // 0xf8895999038a3cb1169a882ebba33ca5
+	ECB1       [32]byte // 0xf0cecf8cdd4452c1f77a297cff13a605
 	parityMask [16]byte
 	Parity     [16]byte
 }
@@ -164,23 +164,23 @@ func main(g Garbler, e Evaluator) uint8 {
 	key := hmac.SumSHA256(mKey[:], SATS)[:16]
 
 	// compute ecbs
-	// var zeros16 [16]byte
-	// ECBK := aes.Block128(key, zeros16)
-	// nonce := getNonce(iv, 1)
-	// ECB1 := aes.Block128(key, nonce)
+	var zeros16 [16]byte
+	ECBK := aes.Block128(key, zeros16)
+	nonce := getNonce(iv, 1)
+	ECB1 := aes.Block128(key, nonce)
 	var counter [aes.BlockSize]byte
 	counter = memcpy(counter, 0, iv, 0)
 	counter = incr(counter)
 
 	// match ecb0, ecb1 against public input
-	// for i := 0; i < 16; i++ {
-	// 	if (ECB1[i] ^ g.ECB1[i]) != 0x00 {
-	// 		return 0x00
-	// 	}
-	// 	if (ECBK[i] ^ g.ECB0[i]) != 0x00 {
-	// 		return 0x00
-	// 	}
-	// }
+	for i := 0; i < 16; i++ {
+		if (ECB1[i] ^ g.ECB1[i]) != 0x00 {
+			return 0x00
+		}
+		if (ECBK[i] ^ g.ECB0[i]) != 0x00 {
+			return 0x00
+		}
+	}
 
 	var block [aes.BlockSize]byte
 	numberECBs := (16 * 16)

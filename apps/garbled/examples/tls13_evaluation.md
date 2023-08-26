@@ -113,7 +113,7 @@ Circuit: #gates=36764075 (XOR=30364072 XNOR=0 AND=6400001 OR=1 INV=1 xor=3036407
 exec offline: 3,08+1,17 = 4.25 s
 exec online: 0,030+1,06+0,432 = 1.52 s
 com offline: 351+0,013 = 351.01 MB
-com online: 2+0,025 = 2.02 kB
+com online: 2+0,025 = 2.02 MB
 
 #### tls13_ecb_auth_mkey.mpcl (constant)
 Circuit: #gates=73554 (XOR=60751 XNOR=0 AND=12801 OR=1 INV=1 xor=60751 !xor=12803 levels=310 width=377) #w=73906
@@ -201,6 +201,11 @@ Circuit: #gates=36837498 (XOR=30424695 XNOR=0 AND=6412801 OR=1 INV=1 xor=3042469
 │ ├╴Rcvd  │              │  0.58% │   2MB │
 │ ╰╴Flcd  │              │        │  5383 │
 └─────────┴──────────────┴────────┴───────┘
+
+exec offline: 3,41+0,68 = 4.09 s
+exec online: 49,52+812,80+321,29 = 1.18 s
+com offline: 352+0,061 = 352.06 MB
+com online: 2+0,025 = 2.02 MB
 
 #### tls13_parity.mpcl (256 B ECBs)
 Circuit: #gates=2048 (XOR=2048 XNOR=0 AND=0 OR=0 INV=0 xor=2048 !xor=0 levels=16 width=128) #w=4224
@@ -295,53 +300,77 @@ com offline: 411+0,015 = 411.01 MB
 com online: 224+0,133 = 224.13 kB
 
 #### tls13_hvzk.mpcl (256B ECBs -- request)
-Circuit: #gates=6290491 (XOR=5054719 XNOR=0 AND=1235434 OR=337 INV=1 xor=5054719 !xor=1235772 levels=863154 width=2800) #w=6294291
+Circuit: #gates=6364202 (XOR=5115374 XNOR=0 AND=1248266 OR=561 INV=1 xor=5115374 !xor=1248828 levels=863218 width=3130) #w=6368514
 
 ┌─────────┬──────────────┬────────┬───────┐
 │ Op      │         Time │      % │  Xfer │
 ├─────────┼──────────────┼────────┼───────┤
-│ Garble  │ 337.180041ms │ 50.00% │       │
-│ Xfer    │  73.498292ms │ 10.90% │  64MB │
-│ OT Init │     11.417µs │  0.00% │  60kB │
-│ OT      │    112.031ms │ 16.61% │ 224kB │
-│ Eval    │ 151.639583ms │ 22.49% │       │
-│ Result  │         18µs │  0.00% │  133B │
-│ Total   │ 674.378333ms │        │  64MB │
-│ ├╴Sent  │              │ 99.78% │  64MB │
+│ Garble  │ 318.511625ms │ 47.06% │       │
+│ Xfer    │  77.453542ms │ 11.44% │  65MB │
+│ OT Init │     14.375µs │  0.00% │  63kB │
+│ OT      │ 112.185125ms │ 16.57% │ 224kB │
+│ Eval    │ 168.679917ms │ 24.92% │       │
+│ Result  │     30.625µs │  0.00% │  133B │
+│ Total   │ 676.875209ms │        │  65MB │
+│ ├╴Sent  │              │ 99.78% │  65MB │
 │ ├╴Rcvd  │              │  0.22% │ 144kB │
-│ ╰╴Flcd  │              │        │   992 │
+│ ╰╴Flcd  │              │        │  1003 │
 └─────────┴──────────────┴────────┴───────┘
 
-exec offline: 337,18+0,73 = 337.91 ms
-exec online: 112,03+151,63+0,018 = 263.67 ms
-com offline: 64+0,06 = 64.06 MB
+exec offline: 318,51+77,45+0,01 = 395.97 ms
+exec online: 112,18+168,67+0,03 = 280.88 ms
+com offline: 65+0,06 = 65.06 MB
 com online: 224+0,133 = 224.13 kB
 
 #### tls13_hvzk.mpcl (kdc, shts, 16kB response ecb parity with ecb01, 256 B request ecb parity)
-Circuit: #gates=44680687 (XOR=36770078 XNOR=0 AND=7909935 OR=673 INV=1 xor=36770078 !xor=7910609 levels=864203 width=178130) #w=44685567
+Circuit: #gates=44754226 (XOR=36830640 XNOR=0 AND=7922688 OR=897 INV=1 xor=36830640 !xor=7923586 levels=864267 width=178460) #w=44759618
 
 ┌─────────┬──────────────┬────────┬───────┐
 │ Op      │         Time │      % │  Xfer │
 ├─────────┼──────────────┼────────┼───────┤
-│ Garble  │ 4.436193833s │ 71.62% │       │
-│ Xfer    │ 855.817125ms │ 13.82% │ 431MB │
-│ OT Init │      16.25µs │  0.00% │  52kB │
-│ OT      │ 259.224792ms │  4.18% │ 274kB │
-│ Eval    │  642.84875ms │ 10.38% │       │
-│ Result  │       40.5µs │  0.00% │  133B │
-│ Total   │  6.19414125s │        │ 432MB │
+│ Garble  │  2.55048725s │ 51.60% │       │
+│ Xfer    │ 931.628166ms │ 18.85% │ 432MB │
+│ OT Init │     29.709µs │  0.00% │  52kB │
+│ OT      │ 142.923083ms │  2.89% │ 274kB │
+│ Eval    │ 1.317931958s │ 26.66% │       │
+│ Result  │       24.5µs │  0.00% │  133B │
+│ Total   │ 4.943024666s │        │ 432MB │
 │ ├╴Sent  │              │ 99.96% │ 432MB │
 │ ├╴Rcvd  │              │  0.04% │ 176kB │
-│ ╰╴Flcd  │              │        │  6595 │
+│ ╰╴Flcd  │              │        │  6606 │
 └─────────┴──────────────┴────────┴───────┘
 
-exec offline: 4,43+0,85 = 5.28 s
-exec online: 259,22+642,84+0,04 = 902.1 ms
-com offline: 431+0,052 = 431.05 MB
+exec offline: 2,55+0,93 = 3.48 s
+exec online: 0,14+1,31 = 1.45 ms
+com offline: 432+0,052 = 432.05 MB
 com online: 274+0,133 = 274.13 kB
+
+#### tls13_hvzk_transparent.mpcl (kdc, shts, 16kB response ecb parity with ecb01, 256 B request ecb parity)
+Circuit: #gates=79126072 (XOR=65434170 XNOR=0 AND=13690780 OR=1121 INV=1 xor=65434170 !xor=13691902 levels=2197091 width=178460) #w=79131592
+
+┌─────────┬───────────────┬────────┬───────┐
+│ Op      │          Time │      % │  Xfer │
+├─────────┼───────────────┼────────┼───────┤
+│ Garble  │  8.336996417s │ 46.59% │       │
+│ Xfer    │  4.351013333s │ 24.31% │ 754MB │
+│ OT Init │      23.709µs │  0.00% │  40kB │
+│ OT      │  277.925166ms │  1.55% │ 274kB │
+│ Eval    │  4.929336292s │ 27.54% │       │
+│ Result  │     305.042µs │  0.00% │  133B │
+│ Total   │ 17.895599959s │        │ 754MB │
+│ ├╴Sent  │               │ 99.98% │ 754MB │
+│ ├╴Rcvd  │               │  0.02% │ 176kB │
+│ ╰╴Flcd  │               │        │ 11521 │
+└─────────┴───────────────┴────────┴───────┘
+
+exec offline: 8,33+4,35 = 12.68 s
+exec online: 0,277+4,92 = 5.19 s
+com offline: 754+0,04 = 754.04 MB
+com online: 274+0,133 =  kB
 
 #### tls13_tag.mpcl (256B ciphertext as input)
 Circuit: #gates=2020785 (XOR=1455261 XNOR=0 AND=565522 OR=1 INV=1 xor=1455261 !xor=565524 levels=9011 width=1584) #w=2023185
+gates time 2: 4.04 million
 
 ┌─────────┬──────────────┬────────┬───────┐
 │ Op      │         Time │      % │  Xfer │
@@ -361,7 +390,7 @@ Circuit: #gates=2020785 (XOR=1455261 XNOR=0 AND=565522 OR=1 INV=1 xor=1455261 !x
 exec offline: 119,33+23,65+0,013 = 142.99 ms, times 2 = 285.98 ms
 exec online: 121,67+124,42+0,034 = 246.12 ms, times 2 = 492.24 ms
 com offline: 26+0,034 = 26.03 MB, times 2 = 52.06 MB
-com online: 254+2 = 256 kB, times 2 = 512 MB
+com online: 254+2 = 256 kB, times 2 = 512 kB
 
 #### tls13_tag.mpcl (1.6 kB ciphertext as input)
 Circuit: #gates=11643659 (XOR=8347043 XNOR=0 AND=3296614 OR=1 INV=1 xor=8347043 !xor=3296616 levels=52019 width=7632) #w=11656811
@@ -383,6 +412,7 @@ Circuit: #gates=11643659 (XOR=8347043 XNOR=0 AND=3296614 OR=1 INV=1 xor=8347043 
 
 #### tls13_tag.mpcl (2 kB ciphertext as input)
 Circuit: #gates=14507612 (XOR=10398171 XNOR=0 AND=4109439 OR=1 INV=1 xor=10398171 !xor=4109441 levels=64819 width=9432) #w=14523964
+gates times 2: 29.01 million
 
 ┌─────────┬──────────────┬────────┬───────┐
 │ Op      │         Time │      % │  Xfer │
@@ -439,3 +469,121 @@ Circuit: #gates=46011059 (XOR=32960543 XNOR=0 AND=13050514 OR=1 INV=1 xor=329605
 │ ├╴Rcvd  │               │  0.61% │   3MB │
 │ ╰╴Flcd  │               │        │  9216 │
 └─────────┴───────────────┴────────┴───────┘
+
+
+### zkp evaluation
+
+#### 2kb zkopen (without plaintext)
+: 22:58:50 INF compiling circuit
+22:58:50 INF parsed circuit inputs nbPublic=17 nbSecret=2000
+22:58:56 INF building constraint builder nbConstraints=58285
+{"level":"debug","elapsed":"11.824307s","time":1692824342,"message":"compile constraint system time."}
+{"level":"debug","written":"2260543331","time":1692824354,"message":"compiled constraint system bytes"}
+{"level":"debug","elapsed":"6.538226s","time":1692824360,"message":"groth16.Setup time."}
+{"level":"debug","written":"9100144","time":1692824360,"message":"prover key bytes"}
+{"level":"debug","written":"868","time":1692824360,"message":"verifier key bytes"}
+22:59:23 DBG constraint system solver done backend=groth16 nbConstraints=58285 took=3189.888583
+22:59:23 DBG main.go:181 > modulus of zk snark compiler 21888242871839275222246405745257275088548364400416034343698204186575808495617
+22:59:24 DBG prover done backend=groth16 curve=bn254 nbConstraints=58285 took=129.613333
+{"level":"debug","elapsed":"3.321334917s","time":1692824364,"message":"groth16.Prove time."}
+{"level":"debug","written":"128","time":1692824364,"message":"proof bytes"}
+{"level":"debug","written":"69","time":1692824364,"message":"witness bytes"}
+22:59:24 DBG verifier done backend=groth16 curve=bn254 took=1.032584
+{"level":"debug","elapsed":"1.045166ms","time":1692824364,"message":"groth16.Verify time."}
+
+## 1kB zkopen:
+go run main.go -debug -tls13-zkopen -byte-size 1000 -iterations 1            (main)gnark_lib
+{"level":"error","time":1692902633,"message":"byte_size must be divisible by 16, e.g. byte_size=64 works."}
+{"level":"debug","time":1692902633,"message":"Debugging activated."}
+modulus: 21888242871839275222246405745257275088548364400416034343698204186575808495617
+size mimc: 31
+kdf: &{0x140000b4480 32 [] 1 [] []}
+{"level":"debug","time":1692902633,"message":"EvaluateZkOpen"}
+{"level":"debug","length":"31","time":1692902633,"message":"zkOpen input size"}
+20:43:53 INF compiling circuit
+20:43:53 INF parsed circuit inputs nbPublic=1009 nbSecret=2000
+20:43:55 INF building constraint builder nbConstraints=49047
+{"level":"debug","elapsed":"3.081750666s","time":1692902637,"message":"compile constraint system time."}
+{"level":"debug","written":"561060909","time":1692902639,"message":"compiled constraint system bytes"}
+{"level":"debug","elapsed":"3.082404333s","time":1692902642,"message":"groth16.Setup time."}
+{"level":"debug","written":"8280132","time":1692902642,"message":"prover key bytes"}
+{"level":"debug","written":"32612","time":1692902642,"message":"verifier key bytes"}
+20:44:03 DBG constraint system solver done backend=groth16 nbConstraints=49047 took=798.232708
+20:44:03 DBG prover done backend=groth16 curve=bn254 nbConstraints=49047 took=104.815125
+{"level":"debug","elapsed":"903.505375ms","time":1692902643,"message":"groth16.Prove time."}
+{"level":"debug","written":"128","time":1692902643,"message":"proof bytes"}
+{"level":"debug","written":"4037","time":1692902643,"message":"witness bytes"}
+20:44:03 DBG verifier done backend=groth16 curve=bn254 took=1.149584
+{"level":"debug","elapsed":"1.173083ms","time":1692902643,"message":"groth16.Verify time."}
+
+### 2kB zkOpen including xor for ciphertext
+go run main.go -debug -tls13-zkopen -byte-size 2000 -iterations 1            (main)gnark_lib
+{"level":"debug","time":1692900696,"message":"Debugging activated."}
+modulus: 21888242871839275222246405745257275088548364400416034343698204186575808495617
+size mimc: 62
+kdf: &{0x140000b44e0 32 [] 1 [] []}
+{"level":"debug","time":1692900696,"message":"EvaluateZkOpen"}
+{"level":"debug","length":"62","time":1692900696,"message":"zkOpen input size"}
+20:11:36 INF compiling circuit
+20:11:36 INF parsed circuit inputs nbPublic=2001 nbSecret=3984
+20:11:42 INF building constraint builder nbConstraints=93997
+{"level":"debug","elapsed":"12.032136875s","time":1692900708,"message":"compile constraint system time."}
+{"level":"debug","written":"2269774883","time":1692900721,"message":"compiled constraint system bytes"}
+{"level":"debug","elapsed":"8.968863875s","time":1692900730,"message":"groth16.Setup time."}
+{"level":"debug","written":"15903344","time":1692900730,"message":"prover key bytes"}
+{"level":"debug","written":"64356","time":1692900730,"message":"verifier key bytes"}
+20:12:13 DBG constraint system solver done backend=groth16 nbConstraints=93997 took=3592.206542
+20:12:14 DBG prover done backend=groth16 curve=bn254 nbConstraints=93997 took=220.064875
+{"level":"debug","elapsed":"3.815470833s","time":1692900734,"message":"groth16.Prove time."}
+{"level":"debug","written":"128","time":1692900734,"message":"proof bytes"}
+{"level":"debug","written":"8005","time":1692900734,"message":"witness bytes"}
+20:12:14 DBG verifier done backend=groth16 curve=bn254 took=1.45075
+{"level":"debug","elapsed":"1.513875ms","time":1692900734,"message":"groth16.Verify time."}
+
+
+## 4kB ZkOpen:
+go run main.go -debug -tls13-zkopen -byte-size 4000 -iterations 1           (main)gnark_lib
+{"level":"debug","time":1692902439,"message":"Debugging activated."}
+modulus: 21888242871839275222246405745257275088548364400416034343698204186575808495617
+size mimc: 125
+kdf: &{0x140000b4480 32 [] 1 [] []}
+{"level":"debug","time":1692902439,"message":"EvaluateZkOpen"}
+{"level":"debug","length":"125","time":1692902439,"message":"zkOpen input size"}
+20:40:39 INF compiling circuit
+20:40:39 INF parsed circuit inputs nbPublic=4017 nbSecret=8016
+20:41:06 INF building constraint builder nbConstraints=185347
+{"level":"debug","elapsed":"49.778955667s","time":1692902488,"message":"compile constraint system time."}
+{"level":"debug","written":"9750109051","time":1692902561,"message":"compiled constraint system bytes"}
+{"level":"debug","elapsed":"41.461696625s","time":1692902602,"message":"groth16.Setup time."}
+{"level":"debug","written":"31328028","time":1692902602,"message":"prover key bytes"}
+{"level":"debug","written":"128868","time":1692902602,"message":"verifier key bytes"}
+20:43:38 DBG constraint system solver done backend=groth16 nbConstraints=185347 took=15704.876541
+20:43:39 DBG prover done backend=groth16 curve=bn254 nbConstraints=185347 took=507.600166
+{"level":"debug","elapsed":"16.338770334s","time":1692902619,"message":"groth16.Prove time."}
+{"level":"debug","written":"128","time":1692902619,"message":"proof bytes"}
+{"level":"debug","written":"16069","time":1692902619,"message":"witness bytes"}
+{"level":"debug","elapsed":"3.360209ms","time":1692902619,"message":"groth16.Verify time."}
+
+## 256B zkOpen:
+go run main.go -debug -tls13-zkopen -byte-size 256 -iterations 1             (main)gnark_lib
+{"level":"debug","time":1692904847,"message":"Debugging activated."}
+modulus: 21888242871839275222246405745257275088548364400416034343698204186575808495617
+size mimc: 8
+kdf: &{0x14000134480 32 [] 1 [] []}
+{"level":"debug","time":1692904847,"message":"EvaluateZkOpen"}
+{"level":"debug","length":"8","time":1692904847,"message":"zkOpen input size"}
+21:20:47 INF compiling circuit
+21:20:47 INF parsed circuit inputs nbPublic=273 nbSecret=528
+21:20:47 INF building constraint builder nbConstraints=15697
+{"level":"debug","elapsed":"217.498292ms","time":1692904847,"message":"compile constraint system time."}
+{"level":"debug","written":"38217641","time":1692904848,"message":"compiled constraint system bytes"}
+{"level":"debug","elapsed":"774.025334ms","time":1692904848,"message":"groth16.Setup time."}
+{"level":"debug","written":"2607288","time":1692904848,"message":"prover key bytes"}
+{"level":"debug","written":"9060","time":1692904848,"message":"verifier key bytes"}
+21:20:48 DBG constraint system solver done backend=groth16 nbConstraints=15697 took=49.094417
+21:20:48 DBG prover done backend=groth16 curve=bn254 nbConstraints=15697 took=32.069083
+{"level":"debug","elapsed":"81.371458ms","time":1692904848,"message":"groth16.Prove time."}
+{"level":"debug","written":"128","time":1692904848,"message":"proof bytes"}
+{"level":"debug","written":"1093","time":1692904848,"message":"witness bytes"}
+21:20:48 DBG verifier done backend=groth16 curve=bn254 took=1.029041
+{"level":"debug","elapsed":"1.041833ms","time":1692904848,"message":"groth16.Verify time."}
