@@ -1,5 +1,41 @@
 ## benchmarks of janus circuits
 
+#### tls13_hvzk_256B_v2.mpcl (only for request)
+Circuit: #gates=6952252 (XOR=5598976 XNOR=0 AND=1352714 OR=561 INV=1 xor=5598976 !xor=1353276 levels=863218 width=4790) #w=6956660
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 371.768125ms │ 50.35% │       │
+│ Xfer    │  92.212625ms │ 12.49% │  71MB │
+│ OT Init │     14.292µs │  0.00% │  58kB │
+│ OT      │ 111.427958ms │ 15.09% │ 224kB │
+│ Eval    │ 162.934667ms │ 22.07% │       │
+│ Result  │     15.583µs │  0.00% │  133B │
+│ Total   │  738.37325ms │        │  71MB │
+│ ├╴Sent  │              │ 99.80% │  71MB │
+│ ├╴Rcvd  │              │  0.20% │ 144kB │
+│ ╰╴Flcd  │              │        │  1090 │
+└─────────┴──────────────┴────────┴───────┘
+
+#### tls13_hvzk_total_v2.mpcl (256 request, 16 kB response and 2 parity sums)
+Circuit: #gates=82106180 (XOR=67550146 XNOR=0 AND=14555136 OR=897 INV=1 xor=67550146 !xor=14556034 levels=864267 width=186811) #w=82111668
+
+┌─────────┬───────────────┬────────┬───────┐
+│ Op      │          Time │      % │  Xfer │
+├─────────┼───────────────┼────────┼───────┤
+│ Garble  │  8.866602834s │ 61.50% │       │
+│ Xfer    │  2.540007583s │ 17.62% │ 794MB │
+│ OT Init │      70.125µs │  0.00% │  25kB │
+│ OT      │  391.626208ms │  2.72% │ 274kB │
+│ Eval    │    2.6191985s │ 18.17% │       │
+│ Result  │      76.875µs │  0.00% │  133B │
+│ Total   │ 14.417582125s │        │ 794MB │
+│ ├╴Sent  │               │ 99.98% │ 794MB │
+│ ├╴Rcvd  │               │  0.02% │ 176kB │
+│ ╰╴Flcd  │               │        │ 12125 │
+└─────────┴───────────────┴────────┴───────┘
+
 #### tls13_xhts.mpcl (constant)
 Circuit: #gates=3140701 (XOR=2440252 XNOR=0 AND=700447 OR=1 INV=1 xor=2440252 !xor=700449 levels=815354 width=1233) #w=3142933
 
@@ -366,7 +402,7 @@ Circuit: #gates=79126072 (XOR=65434170 XNOR=0 AND=13690780 OR=1121 INV=1 xor=654
 exec offline: 8,33+4,35 = 12.68 s
 exec online: 0,277+4,92 = 5.19 s
 com offline: 754+0,04 = 754.04 MB
-com online: 274+0,133 =  kB
+com online: 274+0,133 = 274.13 kB
 
 #### tls13_tag.mpcl (256B ciphertext as input)
 Circuit: #gates=2020785 (XOR=1455261 XNOR=0 AND=565522 OR=1 INV=1 xor=1455261 !xor=565524 levels=9011 width=1584) #w=2023185
