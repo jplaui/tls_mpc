@@ -36,6 +36,11 @@ Circuit: #gates=82106180 (XOR=67550146 XNOR=0 AND=14555136 OR=897 INV=1 xor=6755
 │ ╰╴Flcd  │               │        │ 12125 │
 └─────────┴───────────────┴────────┴───────┘
 
+exec offline: 8,86+2,54 = 11.4 s
+exec online: 0,391+2,61 = 3 s
+com offline: 794+0,025 = 794.05 MB
+com online: 274+0.133 = 274.13 kB
+
 #### tls13_xhts.mpcl (constant)
 Circuit: #gates=3140701 (XOR=2440252 XNOR=0 AND=700447 OR=1 INV=1 xor=2440252 !xor=700449 levels=815354 width=1233) #w=3142933
 
