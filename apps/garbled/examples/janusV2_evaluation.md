@@ -1,4 +1,257 @@
 #### janusV2_transparent16B.mpcl
+Circuit: #gates=5811930 (XOR=4659741 XNOR=0 AND=1152187 OR=1 INV=1 xor=4659741 !xor=1152189 levels=863040 width=2066) #w=5815346
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 279.032167ms │ 46.88% │       │
+│ Xfer    │  61.141416ms │ 10.27% │  60MB │
+│ OT Init │         13µs │  0.00% │  47kB │
+│ OT      │ 109.816667ms │ 18.45% │ 224kB │
+│ Eval    │  145.17075ms │ 24.39% │       │
+│ Result  │     77.333µs │  0.01% │  10kB │
+│ Total   │ 595.251333ms │        │  60MB │
+│ ├╴Sent  │              │ 99.74% │  60MB │
+│ ├╴Rcvd  │              │  0.26% │ 154kB │
+│ ╰╴Flcd  │              │        │   922 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 109,81+145,17+0,07 = 255,05 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent32B.mpcl
+Circuit: #gates=5848691 (XOR=4690102 XNOR=0 AND=1158587 OR=1 INV=1 xor=4690102 !xor=1158589 levels=863040 width=2066) #w=5852235
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 281.784959ms │ 45.67% │       │
+│ Xfer    │  67.521583ms │ 10.94% │  60MB │
+│ OT Init │     10.375µs │  0.00% │   7kB │
+│ OT      │ 109.210083ms │ 17.70% │ 224kB │
+│ Eval    │ 158.438042ms │ 25.68% │       │
+│ Result  │     80.833µs │  0.01% │  12kB │
+│ Total   │ 617.045875ms │        │  60MB │
+│ ├╴Sent  │              │ 99.74% │  60MB │
+│ ├╴Rcvd  │              │  0.26% │ 156kB │
+│ ╰╴Flcd  │              │        │   928 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 109,21+158,43+0,08 = 267,72 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent64B.mpcl
+Circuit: #gates=5922212 (XOR=4750823 XNOR=0 AND=1171387 OR=1 INV=1 xor=4750823 !xor=1171389 levels=863040 width=2066) #w=5926012
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 299.234458ms │ 47.07% │       │
+│ Xfer    │  67.981167ms │ 10.69% │  61MB │
+│ OT Init │     14.625µs │  0.00% │  60kB │
+│ OT      │    109.331ms │ 17.20% │ 224kB │
+│ Eval    │ 159.066583ms │ 25.02% │       │
+│ Result  │    115.458µs │  0.02% │  16kB │
+│ Total   │ 635.743291ms │        │  61MB │
+│ ├╴Sent  │              │ 99.74% │  61MB │
+│ ├╴Rcvd  │              │  0.26% │ 160kB │
+│ ╰╴Flcd  │              │        │   938 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 109,33+159,06+0,11 = 268,5 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent128B.mpcl
+Circuit: #gates=6069256 (XOR=4872267 XNOR=0 AND=1196987 OR=1 INV=1 xor=4872267 !xor=1196989 levels=863040 width=2066) #w=6073568
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 301.014125ms │ 46.99% │       │
+│ Xfer    │  65.826125ms │ 10.28% │  62MB │
+│ OT Init │      11.75µs │  0.00% │  34kB │
+│ OT      │ 110.759916ms │ 17.29% │ 224kB │
+│ Eval    │ 162.732792ms │ 25.40% │       │
+│ Result  │     244.75µs │  0.04% │  24kB │
+│ Total   │ 640.589458ms │        │  62MB │
+│ ├╴Sent  │              │ 99.73% │  62MB │
+│ ├╴Rcvd  │              │  0.27% │ 169kB │
+│ ╰╴Flcd  │              │        │   960 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 110,75+162,73+0,24 = 273,72 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent256B.mpcl
+Circuit: #gates=6363348 (XOR=5115159 XNOR=0 AND=1248187 OR=1 INV=1 xor=5115159 !xor=1248189 levels=863040 width=3130) #w=6368684
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 314.197083ms │ 46.90% │       │
+│ Xfer    │   78.93675ms │ 11.78% │  65MB │
+│ OT Init │         19µs │  0.00% │  47kB │
+│ OT      │ 108.468667ms │ 16.19% │ 224kB │
+│ Eval    │ 168.040042ms │ 25.08% │       │
+│ Result  │     324.75µs │  0.05% │  41kB │
+│ Total   │ 669.986292ms │        │  65MB │
+│ ├╴Sent  │              │ 99.72% │  65MB │
+│ ├╴Rcvd  │              │  0.28% │ 185kB │
+│ ╰╴Flcd  │              │        │  1003 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 108,46+168,04+0,32 = 276.82 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent512B.mpcl
+Circuit: #gates=6951540 (XOR=5600951 XNOR=0 AND=1350587 OR=1 INV=1 xor=5600951 !xor=1350589 levels=863040 width=5930) #w=6958924
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │  339.79625ms │ 48.15% │       │
+│ Xfer    │  83.936209ms │ 11.89% │  71MB │
+│ OT Init │     18.416µs │  0.00% │   8kB │
+│ OT      │  110.54225ms │ 15.66% │ 224kB │
+│ Eval    │  170.87475ms │ 24.21% │       │
+│ Result  │    529.292µs │  0.08% │  74kB │
+│ Total   │ 705.697167ms │        │  71MB │
+│ ├╴Sent  │              │ 99.69% │  71MB │
+│ ├╴Rcvd  │              │  0.31% │ 218kB │
+│ ╰╴Flcd  │              │        │  1090 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 110,54+170,87+0,52 = 281.93 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent1024B.mpcl
+Circuit: #gates=8127940 (XOR=6572551 XNOR=0 AND=1555387 OR=1 INV=1 xor=6572551 !xor=1555389 levels=863040 width=11530) #w=8139420
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 390.547459ms │ 49.63% │       │
+│ Xfer    │  97.944208ms │ 12.45% │  82MB │
+│ OT Init │      16.75µs │  0.00% │  61kB │
+│ OT      │ 110.254417ms │ 14.01% │ 224kB │
+│ Eval    │ 186.141291ms │ 23.65% │       │
+│ Result  │   1.997709ms │  0.25% │ 140kB │
+│ Total   │ 786.901834ms │        │  82MB │
+│ ├╴Sent  │              │ 99.66% │  82MB │
+│ ├╴Rcvd  │              │  0.34% │ 283kB │
+│ ╰╴Flcd  │              │        │  1262 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 110,25+186,14+1,99 = 298.38 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent2048B.mpcl
+Circuit: #gates=10480772 (XOR=8515783 XNOR=0 AND=1964987 OR=1 INV=1 xor=8515783 !xor=1964989 levels=863040 width=22730) #w=10500444
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 550.964292ms │ 56.06% │       │
+│ Xfer    │ 121.092083ms │ 12.32% │ 105MB │
+│ OT Init │     15.875µs │  0.00% │  36kB │
+│ OT      │ 110.443292ms │ 11.24% │ 224kB │
+│ Eval    │  197.43225ms │ 20.09% │       │
+│ Result  │   2.946042ms │  0.30% │ 272kB │
+│ Total   │ 982.893834ms │        │ 105MB │
+│ ├╴Sent  │              │ 99.61% │ 105MB │
+│ ├╴Rcvd  │              │  0.39% │ 414kB │
+│ ╰╴Flcd  │              │        │  1608 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 110,44+197,43+2,94 = 310.81 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent4096B.mpcl
+Circuit: #gates=15186500 (XOR=12402311 XNOR=0 AND=2784187 OR=1 INV=1 xor=12402311 !xor=2784189 levels=863040 width=45130) #w=15222556
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 783.095125ms │ 57.75% │       │
+│ Xfer    │ 178.551542ms │ 13.17% │ 150MB │
+│ OT Init │     14.875µs │  0.00% │  53kB │
+│ OT      │   116.9585ms │  8.63% │ 224kB │
+│ Eval    │ 270.618167ms │ 19.96% │       │
+│ Result  │   6.757416ms │  0.50% │ 536kB │
+│ Total   │ 1.355995625s │        │ 151MB │
+│ ├╴Sent  │              │ 99.55% │ 150MB │
+│ ├╴Rcvd  │              │  0.45% │ 677kB │
+│ ╰╴Flcd  │              │        │  2299 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 116,95+270,61+6,75 = 394.31 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_transparent8192B.mpcl
+Circuit: #gates=24598084 (XOR=20175495 XNOR=0 AND=4422587 OR=1 INV=1 xor=20175495 !xor=4422589 levels=863040 width=89930) #w=24666908
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 1.486979333s │ 60.04% │       │
+│ Xfer    │ 405.531708ms │ 16.37% │ 240MB │
+│ OT Init │     22.542µs │  0.00% │  21kB │
+│ OT      │ 133.872625ms │  5.41% │ 224kB │
+│ Eval    │   428.5035ms │ 17.30% │       │
+│ Result  │  21.768167ms │  0.88% │   1MB │
+│ Total   │ 2.476677875s │        │ 242MB │
+│ ├╴Sent  │              │ 99.50% │ 241MB │
+│ ├╴Rcvd  │              │  0.50% │   1MB │
+│ ╰╴Flcd  │              │        │  3682 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 133,87+428,50+21,76 = 584.13 ms
+com offline:  = 
+com online:  = 
+
+#### janusV2_scalingGCM1024B.mpcl
+Circuit: #gates=2370187 (XOR=1952393 XNOR=0 AND=410624 OR=7169 INV=1 xor=1952393 !xor=417794 levels=2361 width=11739) #w=2386795
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 121.021542ms │ 13.26% │       │
+│ Xfer    │  25.878625ms │  2.84% │  23MB │
+│ OT Init │     16.041µs │  0.00% │  32kB │
+│ OT      │ 397.560084ms │ 43.57% │ 917kB │
+│ Eval    │ 368.023541ms │ 40.33% │       │
+│ Result  │     13.667µs │  0.00% │  133B │
+│ Total   │   912.5135ms │        │  24MB │
+│ ├╴Sent  │              │ 97.54% │  23MB │
+│ ├╴Rcvd  │              │  2.46% │ 589kB │
+│ ╰╴Flcd  │              │        │   361 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline:  = 
+exec online: 397,56+368,02+0,01 = 765.59 ms = 0.76 s
+com offline:  = 
+com online:  = 
+
+#### janusV2_private16B.mpcl
 Circuit: #gates=5812784 (XOR=4659956 XNOR=0 AND=1152266 OR=561 INV=1 xor=4659956 !xor=1152828 levels=863203 width=2073) #w=5816840
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -21,7 +274,7 @@ exec online: 116,52+167,14+0,02 = 283.68 ms
 com offline:  = 
 com online:  = 
 
-#### janusV2_transparent32B.mpcl
+#### janusV2_private32B.mpcl
 Circuit: #gates=5849817 (XOR=4690461 XNOR=0 AND=1158682 OR=673 INV=1 xor=4690461 !xor=1159356 levels=863235 width=2073) #w=5854129
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -45,7 +298,7 @@ com offline:  =
 com online:  = 
 
 
-#### janusV2_transparent64B.mpcl
+#### janusV2_private64B.mpcl
 Circuit: #gates=5923882 (XOR=4751470 XNOR=0 AND=1171514 OR=897 INV=1 xor=4751470 !xor=1172412 levels=863299 width=2073) #w=5928706
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -68,7 +321,7 @@ exec online: 131,81+180,63+0,01 = 312.45 ms
 com offline:  = 
 com online:  = 
 
-#### janusV2_transparent128B.mpcl
+#### janusV2_private128B.mpcl
 Circuit: #gates=6072014 (XOR=4873490 XNOR=0 AND=1197178 OR=1345 INV=1 xor=4873490 !xor=1198524 levels=863427 width=2073) #w=6077862
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -92,7 +345,7 @@ com offline:  =
 com online:  = 
 
 
-#### janusV2_transparent256B.mpcl
+#### janusV2_private256B.mpcl
 Circuit: #gates=6368282 (XOR=5117534 XNOR=0 AND=1248506 OR=2241 INV=1 xor=5117534 !xor=1250748 levels=863683 width=3130) #w=6376178
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -116,7 +369,7 @@ com offline:  =
 com online:  = 
 
 
-#### janusV2_transparent512B.mpcl
+#### janusV2_private512B.mpcl
 Circuit: #gates=6960826 (XOR=5605630 XNOR=0 AND=1351162 OR=4033 INV=1 xor=5605630 !xor=1355196 levels=864195 width=5930) #w=6972818
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -139,7 +392,7 @@ exec online: 360,85+340,57+0,01 = 701.43 ms
 com offline:  = 
 com online:  = 
 
-#### janusV2_transparent1024B.mpcl
+#### janusV2_private1024B.mpcl
 Circuit: #gates=8145930 (XOR=6581838 XNOR=0 AND=1556474 OR=7617 INV=1 xor=6581838 !xor=1564092 levels=865219 width=11530) #w=8166114
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -162,7 +415,7 @@ exec online: 492,80+525,64+0,01 = 1.01845 s
 com offline:  = 
 com online:  = 
 
-#### janusV2_transparent2048B.mpcl
+#### janusV2_private2048B.mpcl
 Circuit: #gates=10516170 (XOR=8534286 XNOR=0 AND=1967098 OR=14785 INV=1 xor=8534286 !xor=1981884 levels=867267 width=22730) #w=10552738
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -185,7 +438,7 @@ exec online: 871,32+873,11+0,01 = 1.7444 s
 com offline:  = 
 com online:  = 
 
-#### janusV2_transparent4096B.mpcl
+#### janusV2_private4096B.mpcl
 Circuit: #gates=15256714 (XOR=12439246 XNOR=0 AND=2788346 OR=29121 INV=1 xor=12439246 !xor=2817468 levels=871363 width=45130) #w=15326050
 
 ┌─────────┬──────────────┬────────┬───────┐
@@ -208,12 +461,26 @@ exec online: 1,65+1,64 = 3.29 s
 com offline:  = 
 com online:  = 
 
-#### janusV2_transparent8192B.mpcl
+#### janusV2_private8192B.mpcl
+Circuit: #gates=24737930 (XOR=20249294 XNOR=0 AND=4430842 OR=57793 INV=1 xor=20249294 !xor=4488636 levels=879555 width=89930) #w=24872802
 
-
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 1.753410708s │ 19.12% │       │
+│ Xfer    │   701.3785ms │  7.65% │ 244MB │
+│ OT Init │     18.792µs │  0.00% │  22kB │
+│ OT      │ 3.247475292s │ 35.42% │   7MB │
+│ Eval    │ 3.466719875s │ 37.81% │       │
+│ Result  │     47.083µs │  0.00% │  133B │
+│ Total   │  9.16905025s │        │ 252MB │
+│ ├╴Sent  │              │ 98.07% │ 247MB │
+│ ├╴Rcvd  │              │  1.93% │   4MB │
+│ ╰╴Flcd  │              │        │  3777 │
+└─────────┴──────────────┴────────┴───────┘
 
 exec offline:  = 
-exec online:  =  s
+exec online: 3,24+3,46 = 6.7 s
 com offline:  = 
 com online:  = 
 
