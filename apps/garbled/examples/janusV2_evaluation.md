@@ -251,6 +251,29 @@ exec online: 397,56+368,02+0,01 = 765.59 ms = 0.76 s
 com offline:  = 
 com online:  = 
 
+#### janusV2_transparent2kB256B.mpcl
+Circuit: #gates=12694470 (XOR=10352707 XNOR=0 AND=2341761 OR=1 INV=1 xor=10352707 !xor=2341763 levels=863040 width=25860) #w=12716630
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 696.355708ms │ 51.04% │       │
+│ Xfer    │ 196.999708ms │ 14.44% │ 126MB │
+│ OT Init │    2.61375ms │  0.19% │  11kB │
+│ OT      │ 145.129125ms │ 10.64% │ 274kB │
+│ Eval    │ 318.302542ms │ 23.33% │       │
+│ Result  │   4.914375ms │  0.36% │ 309kB │
+│ Total   │ 1.364315208s │        │ 126MB │
+│ ├╴Sent  │              │ 99.62% │ 126MB │
+│ ├╴Rcvd  │              │  0.38% │ 483kB │
+│ ╰╴Flcd  │              │        │  1928 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline: 696,35+196,99+2,61 = 895.95 ms
+exec online: 145,12+318,30+4,91 = 468.33 ms
+com offline: 126+0.011 = 126.01 MB
+com online: 274+309 = 583 kB
+
 #### janusV2_private16B.mpcl
 Circuit: #gates=5812784 (XOR=4659956 XNOR=0 AND=1152266 OR=561 INV=1 xor=4659956 !xor=1152828 levels=863203 width=2073) #w=5816840
 
@@ -558,25 +581,48 @@ exec online: 172,93+255,47+0,037 = 428.43 ms
 com offline: 82+0,022 = 82.02 MB
 com online: 274+0.133 = 274.13 kB
 
-#### janusV2_private.mpcl (256 request, 16 kB response + hash on private plaintext chunks)
-Circuit: #gates=8388595 (XOR=6717024 XNOR=0 AND=1556881 OR=114689 INV=1 xor=6717024 !xor=1671571 levels=895748 width=46988) #w=8393987
+#### janusV2_private_withHash2kB256B.mpcl (256 request, 2 kB response + hash on private plaintext chunks)
+Circuit: #gates=17153701 (XOR=14052905 XNOR=0 AND=3083770 OR=17025 INV=1 xor=14052905 !xor=3100796 levels=867844 width=25860) #w=17195829
 
 ┌─────────┬──────────────┬────────┬───────┐
 │ Op      │         Time │      % │  Xfer │
 ├─────────┼──────────────┼────────┼───────┤
-│ Garble  │ 552.542834ms │ 49.84% │       │
-│ Xfer    │ 148.887291ms │ 13.43% │  88MB │
-│ OT Init │     15.459µs │  0.00% │  64kB │
-│ OT      │  175.36525ms │ 15.82% │ 274kB │
-│ Eval    │ 231.712125ms │ 20.90% │       │
-│ Result  │     76.333µs │  0.01% │  133B │
-│ Total   │ 1.108599292s │        │  89MB │
-│ ├╴Sent  │              │ 99.80% │  89MB │
-│ ├╴Rcvd  │              │  0.20% │ 176kB │
-│ ╰╴Flcd  │              │        │  1361 │
+│ Garble  │ 1.000099458s │ 30.88% │       │
+│ Xfer    │ 188.973792ms │  5.84% │ 168MB │
+│ OT Init │     38.083µs │  0.00% │  34kB │
+│ OT      │  1.00809525s │ 31.13% │   2MB │
+│ Eval    │ 1.040914959s │ 32.15% │       │
+│ Result  │     42.875µs │  0.00% │  133B │
+│ Total   │ 3.238164417s │        │ 170MB │
+│ ├╴Sent  │              │ 99.12% │ 169MB │
+│ ├╴Rcvd  │              │  0.88% │   1MB │
+│ ╰╴Flcd  │              │        │  2586 │
 └─────────┴──────────────┴────────┴───────┘
 
-exec offline: 552,54+148,88+0,015 = 701.43 ms
-exec online: 175,36+231,71+0,076 = 407.14 ms
-com offline: 88+0,064 = 88.06 MB
-com online: 274+0.133 = 274.13 kB
+exec offline: 1,0+0,188+ = 1.18 s
+exec online: 1.00+1.04 = 2.04 s
+com offline: 168+0,034 = 186.03 MB
+com online: 274+0.133 = 2.13 MB
+
+#### janusV2_private_noHash2kB256B.mpcl (256 request, 2 kB response)
+Circuit: #gates=12734508 (XOR=10373546 XNOR=0 AND=2344160 OR=16801 INV=1 xor=10373546 !xor=2360962 levels=867843 width=25860) #w=12776380
+
+┌─────────┬──────────────┬────────┬───────┐
+│ Op      │         Time │      % │  Xfer │
+├─────────┼──────────────┼────────┼───────┤
+│ Garble  │ 734.801458ms │ 24.89% │       │
+│ Xfer    │ 159.059209ms │  5.39% │ 127MB │
+│ OT Init │       12.5µs │  0.00% │  26kB │
+│ OT      │ 1.059097291s │ 35.87% │   2MB │
+│ Eval    │ 999.526625ms │ 33.85% │       │
+│ Result  │     25.542µs │  0.00% │  133B │
+│ Total   │ 2.952522625s │        │ 129MB │
+│ ├╴Sent  │              │ 98.84% │ 127MB │
+│ ├╴Rcvd  │              │  1.16% │   1MB │
+│ ╰╴Flcd  │              │        │  1955 │
+└─────────┴──────────────┴────────┴───────┘
+
+exec offline: 734,80+159,05+0,012 = 0.89 s
+exec online: 1,05+0,99 = 2.04 s
+com offline: 127+0,026 = 127.02 MB
+com online: 2+0.133 = 2.13 MB
