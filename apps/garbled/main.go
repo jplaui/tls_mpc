@@ -297,6 +297,7 @@ func main() {
 		i2t = "- "
 	}
 
+	fmt.Println("test print...")
 	fmt.Printf(" %sIn1: %s\n", i1t, circ.Inputs[0])
 	fmt.Printf(" %sIn2: %s\n", i2t, circ.Inputs[1])
 	fmt.Printf(" - Out: %s\n", circ.Outputs)
@@ -346,6 +347,7 @@ func evaluatorMode(oti ot.OT, circ *circuit.Circuit, input *big.Int,
 	if err != nil {
 		return err
 	}
+	fmt.Printf("Hi, I'm the evaluator")
 	fmt.Printf("Listening for connections at %s\n", port)
 
 	for {
@@ -363,6 +365,10 @@ func evaluatorMode(oti ot.OT, circ *circuit.Circuit, input *big.Int,
 			return err
 		}
 
+		fmt.Println("last gate output:", circ.Gates[circ.NumGates-1].Output.ID())
+		fmt.Println("last gate input0:", circ.Gates[circ.NumGates-1].Input0)
+		fmt.Println("last gate input1:", circ.Gates[circ.NumGates-1].Input1)
+		fmt.Println("last gate level:", circ.Gates[circ.NumGates-1].Level)
 		printResults(result, circ.Outputs)
 		if once {
 			return nil
@@ -382,6 +388,15 @@ func garblerMode(oti ot.OT, circ *circuit.Circuit, input *big.Int) error {
 	if err != nil {
 		return err
 	}
+	fmt.Println("circuit:", circ)
+	fmt.Println("circ.String():", circ.String())
+	fmt.Println("cost:", circ.Cost())
+	fmt.Println("circ dump:")
+	// circ.Dump()
+	fmt.Println("last gate output:", circ.Gates[circ.NumGates-1].Output.ID())
+	fmt.Println("last gate input0:", circ.Gates[circ.NumGates-1].Input0)
+	fmt.Println("last gate input1:", circ.Gates[circ.NumGates-1].Input1)
+	fmt.Println("last gate level:", circ.Gates[circ.NumGates-1].Level)
 	printResults(result, circ.Outputs)
 
 	return nil

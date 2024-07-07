@@ -10,6 +10,7 @@ package circuit
 
 import (
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"math/big"
 
@@ -58,6 +59,13 @@ func Garbler(conn *p2p.Conn, oti ot.OT, circ *Circuit, inputs *big.Int,
 
 	// Send program info.
 	if verbose {
+		fmt.Println("-- circuit has been garbled --")
+		// get output wires:
+		for i := 0; i < circ.Outputs.Size(); i++ {
+			wire := garbled.Wires[circ.NumWires-circ.Outputs.Size()+i]
+			fmt.Println("out wire: ", i, ", L0: ", wire.L0.String(), ", L1: ", wire.L1.String())
+			// fmt.Println("check wire label L1:", garbled.Wires[len(garbled.Wires)-1].L1)
+		}
 		fmt.Printf(" - Sending garbled circuit...\n")
 	}
 	if err := conn.SendData(key[:]); err != nil {
@@ -145,16 +153,21 @@ func Garbler(conn *p2p.Conn, oti ot.OT, circ *Circuit, inputs *big.Int,
 	result := big.NewInt(0)
 	var label ot.Label
 
+	fmt.Println("circ output sitze:", circ.Outputs.Size())
 	for i := 0; i < circ.Outputs.Size(); i++ {
 		err := conn.ReceiveLabel(&label, &labelData)
 		if err != nil {
 			return nil, err
 		}
+		fmt.Println("got label data:", labelData, hex.EncodeToString(labelData[:]))
+		fmt.Println("got label:", label)
+
 		if i == 0 {
 			timing.Sample("Eval", nil)
 		}
 		wire := garbled.Wires[circ.NumWires-circ.Outputs.Size()+i]
 
+		// decoding...
 		var bit uint
 		if label.Equal(wire.L0) {
 			bit = 0
@@ -163,6 +176,7 @@ func Garbler(conn *p2p.Conn, oti ot.OT, circ *Circuit, inputs *big.Int,
 		} else {
 			return nil, fmt.Errorf("unknown label %s for result %d", label, i)
 		}
+		fmt.Println("bit resolution yields:", bit)
 		result = big.NewInt(0).SetBit(result, i, bit)
 	}
 	data := result.Bytes()

@@ -132,6 +132,7 @@ func Evaluator(conn *p2p.Conn, oti ot.OT, circ *Circuit, inputs *big.Int,
 
 	for i := 0; i < circ.Outputs.Size(); i++ {
 		r := wires[Wire(circ.NumWires-circ.Outputs.Size()+i)]
+		fmt.Println("wire r:", r)
 		labels = append(labels, r)
 	}
 	for _, l := range labels {
