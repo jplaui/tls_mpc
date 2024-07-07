@@ -1,4 +1,8 @@
-# mpc
+# TLS_MPC
+
+## This repository is a fork of the repo [markkurossi/mpc](https://github.com/markkurossi/mpc) and some additional circuits in the example folder have been added.
+
+## Original Readme from here:
 
 Secure Multi-Party Computation with Go. This project implements secure
 two-party computation with [Garbled circuit](https://en.wikipedia.org/wiki/Garbled_circuit) protocol. The main components are:
